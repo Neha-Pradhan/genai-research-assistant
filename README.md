@@ -21,6 +21,21 @@ responses to retrieved content only
 - Ollama + Llama3.2 — local LLM and embeddings
 - Streamlit — chat UI
 
+## Architecture
+
+```mermaid
+graph TD
+    A([User Question]) --> B[LangGraph Agent]
+    B --> C{tools_condition}
+    C -->|single paper query| D[search_papers tool]
+    C -->|comparison query| E[compare_papers tool]
+    D --> F[(ChromaDB Vector Store)]
+    E --> F
+    F --> G[Llama3.2 via Ollama]
+    G -->|grounded response| H([User Answer])
+    B -.->|traces every step| I[LangSmith]
+```
+
 ## Production considerations
 - Replace ChromaDB local with hosted vector DB (Pinecone, Weaviate) 
 for concurrent users
